@@ -22,7 +22,9 @@ connectDB().then(() => {
 });
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "*"
+}));
 app.use(express.json());
 
 // REST API Routes

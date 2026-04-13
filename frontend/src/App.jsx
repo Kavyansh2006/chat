@@ -18,12 +18,12 @@ function App() {
         body: JSON.stringify({ username: usernameInput }),
       });
       const data = await response.json();
-      
+
       if (!response.ok) {
         alert(data.message || "Login failed");
         return;
       }
-      
+
       setCurrentUser(data); // Stores { _id, username }
     } catch (error) {
       console.error("Login failed", error);
@@ -46,7 +46,7 @@ function App() {
             />
             <button type="submit">
               Join Chat
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
             </button>
           </form>
         </div>

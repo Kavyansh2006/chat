@@ -4,7 +4,9 @@ import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 
 // Initialize socket outside component to avoid reconnects on re-render
-const socket = io(import.meta.env.VITE_BACKEND_URL);
+const socket = io(import.meta.env.VITE_BACKEND_URL, {
+  transports: ["websocket"]
+});
 
 function ChatRoom({ currentUser }) {
   const [messages, setMessages] = useState([]);
@@ -52,9 +54,9 @@ function ChatRoom({ currentUser }) {
   };
 
   return (
-    <div className="glass-panel" style={{ display: 'flex', height: '100%', overflow: 'hidden' }}>
+    <div className="glass-panel chat-room-container">
       {/* Sidebar for Online Users */}
-      <div style={{ width: '280px', borderRight: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.15)', padding: '24px', display: 'flex', flexDirection: 'column' }}>
+      <div className="chat-sidebar">
         <h3 style={{ marginBottom: '24px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: '700', color: 'var(--text-muted)' }}>Online Now &mdash; {activeUsers.length}</h3>
         <ul style={{ listStyle: 'none', overflowY: 'auto', flex: 1, paddingRight: '8px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {activeUsers.map(u => (
@@ -74,9 +76,9 @@ function ChatRoom({ currentUser }) {
              </li>
           ))}
         </ul>
-        
+
         {/* User profile at bottom */}
-        <div style={{ marginTop: '16px', paddingTop: '20px', borderTop: '1px solid var(--glass-border)' }}>
+        <div className="chat-sidebar-profile" style={{ marginTop: '16px', paddingTop: '20px', borderTop: '1px solid var(--glass-border)' }}>
           <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
             <div style={{width:'44px', height:'44px', borderRadius:'50%', background:'linear-gradient(135deg, #a78bfa, #f472b6)', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold', fontSize:'16px', color:'white', boxShadow:'0 4px 10px rgba(244,114,182,0.3)'}}>{currentUser.username.charAt(0).toUpperCase()}</div>
             <div>
@@ -90,8 +92,8 @@ function ChatRoom({ currentUser }) {
       </div>
 
       {/* Main Chat Area */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '24px 32px' }}>
-         <div style={{ paddingBottom: '20px', borderBottom: '1px solid var(--glass-border)', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="chat-main-area">
+         <div className="chat-header">
            <div>
              <h2 style={{ fontSize: '24px', fontWeight: '700', letterSpacing: '-0.5px' }}>General Chat</h2>
              <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginTop: '4px' }}>Welcome to the vibrant community</p>
@@ -100,7 +102,7 @@ function ChatRoom({ currentUser }) {
              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
            </div>
          </div>
-         
+
          <MessageList messages={messages} currentUserId={currentUser._id} />
          <MessageInput onSendMessage={sendMessage} />
       </div>
