@@ -12,7 +12,12 @@ function App() {
     if (!usernameInput.trim()) return;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/login`, {
+      const backendUrl = import.meta.env.VITE_BACKEND_URL;
+      console.log("VITE_BACKEND_URL is:", backendUrl);
+      const targetUrl = `${backendUrl || ''}/api/users/login`;
+      console.log("Attempting login POST request to:", targetUrl);
+
+      const response = await fetch(targetUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: usernameInput }),
@@ -26,8 +31,8 @@ function App() {
 
       setCurrentUser(data); // Stores { _id, username }
     } catch (error) {
-      console.error("Login failed", error);
-      alert("Network error. Is the server running?");
+      console.error("Login failed:", error);
+      alert(`Network error connecting to backend.\n\nBackend URL: ${import.meta.env.VITE_BACKEND_URL || "undefined (missing env var)"}\nURL Attempted: ${import.meta.env.VITE_BACKEND_URL || ""}/api/users/login\n\nError Message: ${error.message}\n\nPlease check if your backend is running/reachable and that Vercel is rebuilt after setting VITE_BACKEND_URL.`);
     }
   };
 
